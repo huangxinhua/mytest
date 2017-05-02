@@ -22,8 +22,8 @@ public class ObejectCompare {
 			for (T obj2 : obj2List) {
 				if (((StudentVO)obj1).getName()==((StudentVO)obj2).getName()) {
 					try {
-//						flag=
-					} catch (Exception e) {
+						flag=compareToEachOther(obj1,obj2);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
 						// TODO: handle exception
 						e.printStackTrace();
 					}
