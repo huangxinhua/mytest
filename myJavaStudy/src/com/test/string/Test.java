@@ -2,7 +2,9 @@ package com.test.string;
 
 import java.io.IOException;
 
-
+/**
+ * HUANGXINHUA
+ */
 public class Test {
 
 	/**
