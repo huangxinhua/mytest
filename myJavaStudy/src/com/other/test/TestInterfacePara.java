@@ -1,5 +1,8 @@
 package com.other.test;
 
+/**
+ *
+ */
 public class TestInterfacePara {
 
 	interface Extendbroadable {
