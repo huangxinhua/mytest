@@ -23,7 +23,7 @@ public class ObejectCompare {
 		for (T obj1 : obj1List) {
 			boolean flag=false;
 			for (T obj2 : obj2List) {
-				if (((StudentVO)obj1).getName()==((StudentVO)obj2).getName()) {
+				if (((StudentVO)obj1).getName().equals(((StudentVO)obj2).getName())) {
 					try {
 						flag=compareToEachOther(obj1,obj2);
 					} catch (IllegalArgumentException | IllegalAccessException e) {
