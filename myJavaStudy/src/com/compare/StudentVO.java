@@ -30,5 +30,14 @@ public class StudentVO {
 	public void setScore(double score) {
 		this.score = score;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "StudentVO{" +
+				"name='" + name + '\'' +
+				", grade='" + grade + '\'' +
+				", age=" + age +
+				", score=" + score +
+				'}';
+	}
 }
