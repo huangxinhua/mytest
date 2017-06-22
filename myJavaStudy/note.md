@@ -1,0 +1,13 @@
+# 1.solr
+XXconfig.xml
+deltaImportQuery 增量导入查询
+deltaQuery 为增量导入查询准备关键字id
+deletedPkQuery 删除增量查询的pk
+query 查询
+<field column="ID" name="id" /> 查询结果映射 column数据库的，name是solr
+<entity dataSource="ds-doc" name="tag_Data" 
+				query="SELECT TAG.TAG_ID ... from table where ..">
+			<field column="TAG_ID" name="tagId" />
+</entity>
+
+# 2.
