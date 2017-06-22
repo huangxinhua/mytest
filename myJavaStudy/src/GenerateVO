@@ -1,0 +1,344 @@
+
+
+public class GenerateVO {
+
+    private String appName; // 应用名称: isop/channel
+    private String srcPath; // 工作空间地址
+    private String className; // 生成类名称
+    private String tableName; // 表名称
+    private String tablePrimaryKey; // 表主键名称
+    private String foreignKey; // 表外键名称
+    private String followClassName; // 从表类名称
+    private String followTablePrimaryKey; // 从表主键名
+    private String treeNameField; // 树节点显示表列名
+    private String treeParentId; // 树父节点表列名
+    private String packageName; // 项目包名称
+    private String aipPackagePath; // api包路径
+    private String daoPackagePath; // dao包路径
+    private String implPackagePath; //实现包路径
+    private String webPackagePath; // web包路径
+    private String configFilePath; // rest配置文件路径
+    private String i18nKey; // 国际化公用部分
+    private String driver; // 数据库链接驱动
+    private String driverUrl; // 链接驱动地址
+    private String password; // 数据库密码
+    private String user; // 数据库用户名
+    private String excelPath; // 国际化excel导出地址
+    private String importOrExportPath; //导入或者导出配置文件路径
+    private String lowerClassName;// 首字母小写类名
+    private String followTableName;// 从表表名称
+    private String followLowerClassName; // 从表首字母小写类名
+    private String queryTableColumnSql; // 查询表字段sql
+    private String queryTablePrimayKeySql; // 查询表主键字段sql
+    private String ignoreReloadColumns; // 忽略显示字段,逗号分割
+    private String importOrExportHeader; // 忽略显示字段,逗号分割
+    private String replacePackName;//已存在的文件目录
+
+    public String getReplacePackName() {
+		return replacePackName;
+	}
+
+	public void setReplacePackName(String replacePackName) {
+		this.replacePackName = replacePackName;
+	}
+
+	public String getImportOrExportHeader() {
+    
+        return importOrExportHeader;
+    }
+
+    public void setImportOrExportHeader(String importOrExportHeader) {
+    
+        this.importOrExportHeader = importOrExportHeader;
+    }
+
+    public String getQueryTableColumnSql() {
+    
+        return queryTableColumnSql;
+    }
+
+    public void setQueryTableColumnSql(String queryTableColumnSql) {
+    
+        this.queryTableColumnSql = queryTableColumnSql;
+    }
+
+    public String getQueryTablePrimayKeySql() {
+    
+        return queryTablePrimayKeySql;
+    }
+
+    public void setQueryTablePrimayKeySql(String queryTablePrimayKeySql) {
+    
+        this.queryTablePrimayKeySql = queryTablePrimayKeySql;
+    }
+
+    public String getIgnoreReloadColumns() {
+    
+        return ignoreReloadColumns;
+    }
+
+    public void setIgnoreReloadColumns(String ignoreReloadColumns) {
+    
+        this.ignoreReloadColumns = ignoreReloadColumns;
+    }
+
+    public String getFollowTableName() {
+    
+        return followTableName;
+    }
+
+    public void setFollowTableName(String followTableName) {
+    
+        this.followTableName = followTableName;
+    }
+
+    public String getFollowLowerClassName() {
+    
+        return followLowerClassName;
+    }
+
+    public void setFollowLowerClassName(String followLowerClassName) {
+    
+        this.followLowerClassName = followLowerClassName;
+    }
+
+    public String getImportOrExportPath() {
+    
+        return importOrExportPath;
+    }
+
+    public void setImportOrExportPath(String importOrExportPath) {
+    
+        this.importOrExportPath = importOrExportPath;
+    }
+
+    public String getLowerClassName() {
+    
+        return lowerClassName;
+    }
+
+    public void setLowerClassName(String lowerClassName) {
+    
+        this.lowerClassName = lowerClassName;
+    }
+
+    public String getExcelPath() {
+    
+        return excelPath;
+    }
+
+    public void setExcelPath(String excelPath) {
+    
+        this.excelPath = excelPath;
+    }
+
+    public String getAppName() {
+
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+
+        this.appName = appName;
+    }
+
+    public String getSrcPath() {
+
+        return srcPath;
+    }
+
+    public void setSrcPath(String srcPath) {
+
+        this.srcPath = srcPath;
+    }
+
+    public String getClassName() {
+
+        return className;
+    }
+
+    public void setClassName(String className) {
+
+        this.className = className;
+    }
+
+    public String getTableName() {
+
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+
+        this.tableName = tableName;
+    }
+
+    public String getTablePrimaryKey() {
+
+        return tablePrimaryKey;
+    }
+
+    public void setTablePrimaryKey(String tablePrimaryKey) {
+
+        this.tablePrimaryKey = tablePrimaryKey;
+    }
+
+    public String getForeignKey() {
+
+        return foreignKey;
+    }
+
+    public void setForeignKey(String foreignKey) {
+
+        this.foreignKey = foreignKey;
+    }
+
+    public String getFollowClassName() {
+
+        return followClassName;
+    }
+
+    public void setFollowClassName(String followClassName) {
+
+        this.followClassName = followClassName;
+    }
+
+    public String getFollowTablePrimaryKey() {
+
+        return followTablePrimaryKey;
+    }
+
+    public void setFollowTablePrimaryKey(String followTablePrimaryKey) {
+
+        this.followTablePrimaryKey = followTablePrimaryKey;
+    }
+
+    public String getTreeNameField() {
+
+        return treeNameField;
+    }
+
+    public void setTreeNameField(String treeNameField) {
+
+        this.treeNameField = treeNameField;
+    }
+
+    public String getTreeParentId() {
+
+        return treeParentId;
+    }
+
+    public void setTreeParentId(String treeParentId) {
+
+        this.treeParentId = treeParentId;
+    }
+
+    public String getPackageName() {
+
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+
+        this.packageName = packageName;
+    }
+
+    public String getAipPackagePath() {
+
+        return aipPackagePath;
+    }
+
+    public void setAipPackagePath(String aipPackagePath) {
+
+        this.aipPackagePath = aipPackagePath;
+    }
+
+    public String getDaoPackagePath() {
+
+        return daoPackagePath;
+    }
+
+    public void setDaoPackagePath(String daoPackagePath) {
+
+        this.daoPackagePath = daoPackagePath;
+    }
+
+    public String getImplPackagePath() {
+
+        return implPackagePath;
+    }
+
+    public void setImplPackagePath(String implPackagePath) {
+
+        this.implPackagePath = implPackagePath;
+    }
+
+    public String getWebPackagePath() {
+
+        return webPackagePath;
+    }
+
+    public void setWebPackagePath(String webPackagePath) {
+
+        this.webPackagePath = webPackagePath;
+    }
+
+    public String getConfigFilePath() {
+
+        return configFilePath;
+    }
+
+    public void setConfigFilePath(String configFilePath) {
+
+        this.configFilePath = configFilePath;
+    }
+
+    public String getI18nKey() {
+
+        return i18nKey;
+    }
+
+    public void setI18nKey(String i18nKey) {
+
+        this.i18nKey = i18nKey;
+    }
+
+    public String getDriver() {
+
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+
+        this.driver = driver;
+    }
+
+    public String getDriverUrl() {
+
+        return driverUrl;
+    }
+
+    public void setDriverUrl(String driverUrl) {
+
+        this.driverUrl = driverUrl;
+    }
+
+    public String getPassword() {
+
+        return password;
+    }
+
+    public void setPassword(String password) {
+
+        this.password = password;
+    }
+
+    public String getUser() {
+
+        return user;
+    }
+
+    public void setUser(String user) {
+
+        this.user = user;
+    }
+}
