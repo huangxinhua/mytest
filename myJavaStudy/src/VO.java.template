@@ -1,0 +1,31 @@
+package com.it.${packName};
+
+import java.util.Date;
+
+import com.huawei.it.jalor5.core.base.BaseVO;
+
+public class ${className}VO extends BaseVO {
+    private static final long serialVersionUID = 1L;
+    
+    <%
+        for(entry in tableColumnMap){
+            var key = entry.key;
+            var value = entry.value;
+            print(' private ' + value.fieldDataType + ' ' + value.fieldName + ';// ' + value.columnComments + '\r\n');
+        }
+    %>
+    
+    <%
+        for(entry in tableColumnMap){
+            var key = entry.key;
+            var value = entry.value;
+            print(' public ' + value.fieldDataType + ' get' + value.upperFieldName + '(){\r\n');
+            print('     return  ' + value.fieldName + ';\r\n');
+            print(' }\r\n');
+            
+            print(' public ' + value.fieldDataType + ' set' + value.upperFieldName + '(' + value.fieldDataType + ' ' + value.fieldName + '){\r\n');
+            print('     return  this.' + value.fieldName +' = ' + value.fieldName + ';\r\n');
+            print(' }\r\n');
+        }
+    %>
+}
