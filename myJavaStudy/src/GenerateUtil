@@ -1,0 +1,498 @@
+
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+/*import java.util.Arrays;
+import java.util.Date;
+import java.util.List;*/
+import java.util.Collection;
+import java.util.Map;
+
+/*import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;*/
+
+/*import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;*/
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
+public class GenerateUtil {
+
+    /**
+     * 新增rest配置到service.xml
+     * 
+     */
+    public static void writeRestConfigToFile(String configFilePath,String packageName, String className) {
+
+        SAXReader read = new SAXReader();
+        try {
+            String lowerClassName = className.substring(0, 1).toLowerCase() + className.substring(1,className.length());
+            // 读取service.xml文件
+            Document document = read.read(new File(configFilePath));
+
+            // 获取根节点
+            Element root = document.getRootElement();
+
+            // 新增rest配置节点
+            Element newConfigEle = root.addElement("jaxrs:server");
+
+            // 新增节点属性
+            newConfigEle.addAttribute("id", lowerClassName + "Rest");
+            newConfigEle.addAttribute("address", "/" + packageName + "/" + lowerClassName);
+
+            //配置子节点属性
+            Element beansElement = newConfigEle.addElement("jaxrs:serviceBeans");
+            Element refElememt = beansElement.addElement("ref");
+            refElememt.addAttribute("bean", lowerClassName + "Service");
+
+            Element providersElememt = newConfigEle.addElement("jaxrs:providers");
+            providersElememt.addElement("ref").addAttribute("bean", "jsonProvider");
+            providersElememt.addElement("ref").addAttribute("bean", "errorHandlerProvider");
+
+            // 将有变化的xml对象重新写入到service.xml配置文件中
+            Writer osWrite = new OutputStreamWriter(new FileOutputStream(configFilePath));
+            OutputFormat format = OutputFormat.createPrettyPrint();
+            format.setEncoding("UTF-8");//设置编码 ，确保解析的xml为UTF-8格式
+            XMLWriter writer = new XMLWriter(osWrite, format);
+            writer.write(document);
+
+            writer.flush();
+            writer.close();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * 读取配置文件, 获取数据库连接
+     */
+    public static Connection getConnection(String driver,String driverUrl, String user, String password) {
+
+        try {
+            Class.forName(driver);
+            Connection conn = DriverManager.getConnection(driverUrl, user, password);
+            return conn;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    /**
+     * 转换方法: 将表列名称转换为java属性名称
+     * @param tableColumn
+     * @return
+     */
+    public static String getClassAttribute(String tableColumn){
+        StringBuffer returnColumnName = new StringBuffer();
+        if(!isNullOrEmpty(tableColumn)){
+            String[] column = tableColumn.split("_");
+            for (int i = 0; i < column.length; i++) {
+                String str = column[i];
+                if(i == 0){
+                    returnColumnName.append(str.toLowerCase());
+                }else{
+                    returnColumnName.append(str.substring(0,1).toUpperCase());
+                    returnColumnName.append(str.substring(1,str.length()).toLowerCase());
+                }
+            }
+            return returnColumnName.toString();
+        }
+        return null;
+    }
+    
+    public static String toFirstLowerStr(String str){
+        return str.substring(0, 1).toLowerCase() + str.substring(1, str.length());
+    }
+    
+    /**
+     * 转换方法: 将表列名称转换为java属性名称
+     * @param tableColumn
+     * @return
+     */
+    public static String getShowAttribute(String tableColumn){
+        StringBuffer returnColumnName = new StringBuffer();
+        if(!isNullOrEmpty(tableColumn)){
+            String[] column = tableColumn.split("_");
+            for (int i = 0; i < column.length; i++) {
+                String str = column[i];
+                returnColumnName.append(str.substring(0,1).toUpperCase());
+                returnColumnName.append(str.substring(1,str.length()).toLowerCase());
+                returnColumnName.append(" ");
+            }
+            return returnColumnName.toString().trim();
+        }
+        return null;
+    }
+    
+    /**
+     * 转换方法: 将表列类型转换为mybatis支持的数据类型
+     * @param dbType
+     * @return
+     */
+    public static String convertDataType(String dbType) {
+
+        if ("NUMBER".equals(dbType)) {
+            return "NUMERIC";
+        }
+        if ("VARCHAR2".equals(dbType)) {
+            return "VARCHAR";
+        }
+        if ("CLOB".equals(dbType)) {
+            return "VARCHAR";
+        }
+        if ("CHAR".equals(dbType)) {
+            return "VARCHAR";
+        }
+        if ("DATE".equals(dbType)) {
+            return "DATE";
+        }
+        return "";
+    }
+
+    /**
+     * 转换方法: 将表列类型转换为java基础数据类型
+     * @param dbType
+     * @return
+     */
+    public static String convertCodeType(String dbType) {
+
+        if ("NUMBER".equals(dbType)) {
+            return "Long";
+        }
+        if ("VARCHAR2".equals(dbType)) {
+            return "String";
+        }
+        if ("CLOB".equals(dbType)) {
+            return "String";
+        }
+        if ("CHAR".equals(dbType)) {
+            return "String";
+        }
+        if ("DATE".equals(dbType)) {
+            return "Date";
+        }
+        return "";
+    }
+    
+    /**
+     * 创建文件目录以及文件方法
+     * @param fileDirectoryAndName
+     * @param fileContent
+     */
+    public static void createNewFile(String fileDirectoryAndName, String fileContent) {
+        
+        //创建File对象，参数为String类型，表示目录名
+        File file = new File(fileDirectoryAndName);
+
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+
+        //下面把数据写入创建的文件，首先新建文件名为参数创建FileWriter对象
+        FileWriter resultFile = null;
+        PrintWriter myNewFile = null;
+        try {
+            resultFile = new FileWriter(file);
+
+            //把该对象包装进PrinterWriter对象
+            myNewFile = new PrintWriter(resultFile);
+
+            //再通过PrinterWriter对象的println()方法把字符串数据写入新建文件
+            myNewFile.println(fileContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                myNewFile.close();
+                resultFile.close();//关闭文件写入流
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public static boolean isNullOrEmpty(String s) {
+        return s == null || s.length() == 0;
+    }
+    
+    public static boolean isNullOrEmpty(Collection<?> collection) {
+        if (collection == null || collection.isEmpty())
+            return true;
+        return false;
+    }
+    
+    public static boolean isNullOrEmpty(Map<?, ?> map) {
+        if (map == null || map.isEmpty())
+            return true;
+        return false;
+    }
+    
+    public static boolean isNullOrEmpty(Object[] array) {
+        if (array == null || array.length == 0)
+            return true;
+        return false;
+    }
+    
+    /**
+     * 生成国际化excel文件
+     * @param dataMap 数据源
+     * @param i18nKey 国际化名称公共部分
+     * @param filePath 生成后文件存放路径
+     * @param ignoreFileds 需要忽略的字段
+     * jxl.jar 生成excel,只支持03版excel生成
+     */
+   /* public static void writeExcel(Map<String,TableVO> dataMap, String i18nKey, String filePath, String ignoreFileds) {
+        //设置导出文件名称
+        String reportName = "I18n" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xls";
+        
+        List<String> headerList = new ArrayList<String>();
+        headerList.add("Key");
+        headerList.add("IContent");
+        headerList.add("Language");
+        headerList.add("Remark");
+        
+        List<String> languageList = new ArrayList<String>();
+        languageList.add("en_US");
+        languageList.add("zh_CN");
+        
+        List<String> dataList = new ArrayList<String>(dataMap.keySet());
+        
+        List<String> ignoreList = new ArrayList<String>();
+        if(!isNullOrEmpty(ignoreFileds)){
+            ignoreList = Arrays.asList(ignoreFileds.split(","));
+        }
+        
+        try {
+            WritableWorkbook wwb = Workbook.createWorkbook(new File(filePath + File.separator + reportName));
+            WritableSheet ws = wwb.createSheet("I18n",0); 
+            for (int headerIndex = 0; headerIndex < headerList.size(); headerIndex++) {
+                String headerName = headerList.get(headerIndex);
+                ws.addCell(new Label(headerIndex,0,headerName));
+                int langNum =1;
+                for (String lang : languageList) {
+                    for (int columnIndex = 0; columnIndex < dataList.size(); columnIndex++) {
+                        String columnKey = dataList.get(columnIndex);
+                        TableVO tabvo = dataMap.get(columnKey);
+
+                        if(ignoreList.contains(columnKey)){
+                            continue;
+                        }
+                        
+                        if("Key".equals(headerName)){
+                            ws.addCell(new Label(headerIndex,langNum,i18nKey + columnKey));
+                        }else if("IContent".equals(headerName)){
+                            ws.addCell(new Label(headerIndex,langNum,getShowAttribute(tabvo.getTableColumName())));
+                        }else if("Language".equals(headerName)){
+                            ws.addCell(new Label(headerIndex,langNum,lang));
+                        }else if("Remark".equals(headerName)){
+                            ws.addCell(new Label(headerIndex,langNum,tabvo.getColumnComments()));
+                        }
+                        langNum++;
+                    }
+                }
+            }
+            
+            wwb.write();   
+            wwb.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (RowsExceededException e) {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+    }*/
+    
+    /**
+     * 生成国际化excel文件
+     * @param dataMap 数据源
+     * @param i18nKey 国际化名称公共部分
+     * @param filePath 生成后文件存放路径
+     * @param ignoreFileds 需要忽略的字段
+     * POI 生成excel
+     */
+   /* public static void writeExcelPOI(Map<String,TableVO> dataMap, String i18nKey, String filePath, String ignoreFileds) {
+        //设置导出文件名称
+        String reportName = "I18n" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx";
+
+        List<String> headerList = new ArrayList<String>();
+        headerList.add("Key");
+        headerList.add("IContent");
+        headerList.add("Language");
+        headerList.add("Remark");
+
+        List<String> languageList = new ArrayList<String>();
+        languageList.add("en_US");
+        languageList.add("zh_CN");
+
+        List<String> dataList = new ArrayList<String>(dataMap.keySet());
+
+        List<String> ignoreList = new ArrayList<String>();
+        if (!isNullOrEmpty(ignoreFileds)) {
+            ignoreList = Arrays.asList(ignoreFileds.split(","));
+        }
+        List<List<String>> excelRowData = new ArrayList<List<String>>();
+
+        for (String lang : languageList) {
+            for (int columnIndex = 0; columnIndex < dataList.size(); columnIndex++) {
+                List<String> columnList = new ArrayList<String>();
+                String columnKey = dataList.get(columnIndex);
+                TableVO tabvo = dataMap.get(columnKey);
+                for (int headerIndex = 0; headerIndex < headerList.size(); headerIndex++) {
+                    String headerName = headerList.get(headerIndex);
+                    if (ignoreList.contains(columnKey)) {
+                        continue;
+                    }
+                    if ("Key".equals(headerName)) {
+                        columnList.add(i18nKey + columnKey);
+                    } else if ("IContent".equals(headerName)) {
+                        columnList.add(getShowAttribute(tabvo.getTableColumName()));
+                    } else if ("Language".equals(headerName)) {
+                        columnList.add(lang);
+                    } else if ("Remark".equals(headerName)) {
+                        columnList.add(tabvo.getColumnComments());
+                    }
+                }
+
+                if (!isNullOrEmpty(columnList)) {
+                    excelRowData.add(columnList);
+                }
+            }
+        }
+        
+        getFile(excelRowData, headerList, filePath, reportName);
+    }*/
+    
+    /**
+     * 功能:根据传入的导出数据集合/表头名称/导出文件名,组合成一个excel对象放入文件输出流中做为返回对象
+     * @param excelRowData 导出数据集合
+     * @param headerList    表头名称集合
+     * @param reportName    导出文件名称
+     * @return
+     */
+    /*@SuppressWarnings({ "deprecation" })
+	private static void getFile(List<List<String>> excelRowData, List<String> headerList, String filePath, String reportName) {
+        if(!isNullOrEmpty(headerList)){
+            File file = new File(filePath + File.separator + reportName);
+            FileOutputStream fos = null;
+            try {   
+                fos = new FileOutputStream(file);
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                //单元格字体
+                HSSFFont cellFont=(HSSFFont) workbook.createFont();
+                cellFont.setFontName("Arial");
+                cellFont.setFontHeightInPoints((short)10);
+                cellFont.setColor(HSSFColor.BLACK.index);
+                
+                //表头的单元格样式
+                CellStyle headerCellStyle = getHeaderCellStyle(workbook);
+                Sheet userSheet = workbook.createSheet("I18n");
+                
+                if(!isNullOrEmpty(headerList)){
+                    Row idRow = userSheet.createRow(0);
+                    for(int headerIndex = 0; headerIndex<headerList.size(); headerIndex++){
+                        Cell idCell = idRow.createCell(headerIndex);
+                        
+                        userSheet.setColumnWidth(headerIndex, 22*256);
+                        idCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                        idCell.setCellStyle(headerCellStyle);
+                        idCell.setCellValue(headerList.get(headerIndex));
+                    }
+                }
+                
+                if(!isNullOrEmpty(excelRowData)){
+                    for(int rowIndex = 0; rowIndex < excelRowData.size(); rowIndex++){
+                        List<String> rowList = excelRowData.get(rowIndex);
+                        Row idRow = userSheet.createRow(rowIndex+1);
+                        for (int cellIndex = 0; cellIndex < rowList.size(); cellIndex++) {
+                            Cell roleUserCell = idRow.createCell(cellIndex);
+                            
+                            roleUserCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                            roleUserCell.setCellValue(rowList.get(cellIndex));
+                        }
+                        
+                    }
+                    Row idRow = userSheet.createRow(0);
+                    for(int headerIndex = 0; headerIndex<headerList.size(); headerIndex++){
+                        Cell idCell = idRow.createCell(headerIndex);
+                        
+                        userSheet.setColumnWidth(headerIndex, 22*256);
+                        idCell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                        idCell.setCellStyle(headerCellStyle);
+                        idCell.setCellValue(headerList.get(headerIndex));
+                    }
+                }
+                workbook.write(fos);
+                fos.flush();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }catch (IOException e) {
+                e.printStackTrace();
+            }finally{
+                try {
+                    if(fos!=null){
+                        fos.close();
+                    }
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+            }
+        }
+    }*/
+    
+    /*//表头样式
+    @SuppressWarnings("deprecation")
+	private static CellStyle getHeaderCellStyle(HSSFWorkbook workbook){
+        
+        CellStyle headerCellStyle = workbook.createCellStyle();
+        //表头字体
+        HSSFFont headerFont=(HSSFFont) workbook.createFont();
+        headerFont.setFontName("Arial");
+        headerFont.setFontHeightInPoints((short)10);
+        headerFont.setColor(HSSFColor.WHITE.index);
+        headerFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        
+        headerCellStyle.setLocked(false);
+        headerCellStyle.setFont(headerFont);
+        headerCellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        headerCellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        headerCellStyle.setFillForegroundColor(HSSFColor.GREEN.index);
+        headerCellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        headerCellStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        headerCellStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+        headerCellStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+        headerCellStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+        
+        return headerCellStyle;
+    }*/
+}
