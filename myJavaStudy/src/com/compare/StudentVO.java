@@ -1,5 +1,5 @@
 package com.compare;
-
+//hua
 public class StudentVO {
 
 	private String name;
