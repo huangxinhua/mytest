@@ -1,0 +1,54 @@
+@Override
+	public void exportUrlTypeData(HttpServletResponse response) {
+		List<UrlTypeDataVO> list = uxDataDao.queryUrlTypeData();
+		String fileName = "根据urlType统计-" + DateUtil.getDate2Str(LocalDateTime.now()) + ".xlsx";
+		try {
+			fileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			logger.error("AppService getExcel error: "+ e1.toString());
+		}
+		response.setContentType("application/vnd.ms-excel");
+		response.setHeader("Content-disposition", "attachment;filename="+fileName );
+		String[] excelHeader = { "序号","显示时间", "urlType", "所有组件个数", "V2组件个数"}; 
+		
+		@SuppressWarnings("resource")
+		XSSFWorkbook  wb = new XSSFWorkbook();
+		XSSFSheet  sheet = wb.createSheet("根据urlType统计数据");
+		XSSFRow  row = sheet.createRow((int) 0);
+		XSSFCellStyle style = wb.createCellStyle();
+		
+		for (int i = 0; i < excelHeader.length; i++) {
+			XSSFCell  cell = row.createCell(i);
+			cell.setCellValue(excelHeader[i]);
+			cell.setCellStyle(style);
+		}
+		sheet.setColumnWidth(2, 30 * 256);
+		
+		for (int i = 0; i < list.size(); i++) {
+			row = sheet.createRow(i + 1);
+			UrlTypeDataVO vo = list.get(i);
+			row.createCell(0).setCellValue(i + 1);
+			row.createCell(1).setCellValue(vo.getShowTime());
+			row.createCell(2).setCellValue(vo.getUrlType());
+			row.createCell(3).setCellValue(vo.getAllNum());
+			row.createCell(4).setCellValue(vo.getV2Num());
+		}
+		
+		OutputStream out = null;
+		try {
+			out = response.getOutputStream();
+			wb.write(out);
+			
+			out.flush();
+		} catch (IOException e) {
+			logger.error("task export excel error: "+ e.toString());
+		} finally {
+			try {
+				if(out != null){
+					out.close();
+				}		
+			} catch (IOException e) {
+				logger.error("task export excel error: "+ e.toString());
+			}	
+		}
+	}
