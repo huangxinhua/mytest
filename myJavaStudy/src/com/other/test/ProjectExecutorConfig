@@ -1,0 +1,43 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2021-2021. All rights reserved.
+ */
+
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+/**
+ * 类/接口功能描述:
+ *
+ * @author wWX986891/wuhao
+ * @since 2020/11/16
+ */
+@Configuration
+public class ProjectExecutorConfig {
+
+    private static final Integer corePoolSize = 10;//线程池维护线程的最少数量
+
+    private static final Integer maxPoolSize = 100;//线程池维护线程的最大数量
+
+    private static final Integer queueCapacity = 1024; //缓存队列
+
+    private static final Integer keepAlive = 60;//允许的空闲时间
+
+    @Bean("asyncProjectExecutor")
+    public Executor asyncExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(corePoolSize);
+        executor.setMaxPoolSize(maxPoolSize);
+        executor.setQueueCapacity(queueCapacity);
+        executor.setThreadNamePrefix("ExecutorConfig-projectManagerExecutor");
+        // rejection-policy：当pool已经达到max size的时候，如何处理新任务
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy()); //对拒绝task的处理策略
+        executor.setKeepAliveSeconds(keepAlive);
+        executor.initialize();
+        return executor;
+    }
+}
