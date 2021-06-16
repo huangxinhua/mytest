@@ -1,0 +1,55 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2021-2021. All rights reserved.
+ */
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
+
+import com.alibaba.fastjson.JSON;
+
+@Aspect
+@Component("ProjectLogAopAspect")
+// @Order(Integer.MAX_VALUE - 1)
+public class LogAopAspect {
+    private static final ILogger logger = JalorLoggerFactory.getLogger(LogAopAspect.class);
+
+    // 配置接入点
+    @Pointcut("execution(* com.huawei.it.cbg..*.*Service.*(..)) "
+        /*+ " || @annotation(com.huawei.it.jalor5.core.annotation.JalorOperation) "*/)
+    private void loggerAspect() {
+    }// 定义一个切入点
+
+    @Around("loggerAspect()")
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        String methodName = null; // 请求ClassName
+        String targetName = null;
+        long beforeTime = System.currentTimeMillis();
+        try {
+            // 变量赋值
+            targetName = joinPoint.getTarget().getClass().getName(); // 获取class名称
+            methodName = joinPoint.getSignature().getName(); // 获取方法名称
+            Object[] args = joinPoint.getArgs();
+            // 获取描述信息
+            String methodInfo = ">>>>>" + "执行service方法详细描述信息:类名:ClassName---->" + targetName + "调用方法:methodName---->" + targetName + "." + methodName
+                + "\n";
+            String paramInfo = "输入参数param:对象---->" + (args != null && args.length > 0 ? JSON.toJSONString(args) : "null") + ">>>>>";
+            logger.info(methodInfo + paramInfo);
+
+        } catch (Exception e) {
+            logger.error2("LogAopAspect 异常", "around", "Request parameter logging error", e);
+        }
+        //执行目标方法
+        Object obj = joinPoint.proceed();
+        long executeTime = System.currentTimeMillis() - beforeTime;
+        //大于200毫秒打印日志
+        if (executeTime > 200) {
+            logger.warn(">>>>>" + "调用方法:methodName---->" + targetName + "." + methodName + "   共执行了: " + executeTime + "毫秒>>>>>");
+        }
+        return obj;
+
+    }
+
+}
