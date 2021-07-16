@@ -2,6 +2,111 @@
  * Copyright (c) Huawei Technologies Co., Ltd. 2021-2021. All rights reserved.
  */
 
+DROP TABLE IF EXISTS `activity_doc_template`;
+CREATE TABLE `activity_doc_template` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `activity_template_id` varchar(32) NOT NULL COMMENT '活动模板id',
+  `doc_template_type` varchar(64) NOT NULL COMMENT '文档模板类型：下发文档模板DeliveringDoc；反馈文档模板feedbackDoc',
+  `type_` varchar(64) NOT NULL COMMENT '模板类型：doc 文档；url 链接',
+  `reference_Template` text NOT NULL COMMENT '当类型doc时存s3key和名称，当链接时存url',
+  `order_` int(2) NOT NULL COMMENT '顺序',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `activity_doc_template_INDEX` (`activity_template_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动文档模板';
+
+-- ----------------------------
+-- Table structure for activity_template
+-- ----------------------------
+DROP TABLE IF EXISTS `activity_template`;
+CREATE TABLE `activity_template` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `plan_template_id` varchar(32) DEFAULT NULL COMMENT '计划模板id',
+  `object_type` varchar(100) DEFAULT NULL COMMENT '类型，内码',
+  `type` varchar(100) NOT NULL COMMENT '类型',
+  `level_` int(1) NOT NULL COMMENT '层级深度不大于5',
+  `parent_id` varchar(32) DEFAULT NULL COMMENT '父节点id',
+  `order_` int(20) NOT NULL COMMENT '序号',
+  `category_order` varchar(50) DEFAULT NULL COMMENT '目录序号 如 1-1',
+  `name` varchar(100) NOT NULL COMMENT '名称',
+  `role_key` varchar(100) DEFAULT NULL COMMENT '任务承担角色',
+  `divisive_supplier` varchar(20) DEFAULT NULL COMMENT '是否区分供应商',
+  `feedback` int(1) DEFAULT NULL COMMENT '是否需要反馈',
+  `feedback_role` varchar(255) DEFAULT NULL COMMENT '反馈角色',
+  `confidentiality_type` varchar(200) DEFAULT NULL COMMENT '保密级别',
+  `close_role` varchar(200) DEFAULT NULL COMMENT '任务关闭确认角色',
+  `activity_workflow_template` varchar(200) DEFAULT NULL COMMENT '活动关联流程',
+  `deliverables` text COMMENT '交付件列表',
+  `description` text COMMENT '任务说明',
+  `instance_id` varchar(200) DEFAULT NULL COMMENT '实例id',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  `role_key_mapping` varchar(64) DEFAULT NULL COMMENT '任务承担角色-name',
+  PRIMARY KEY (`id`),
+  KEY `activity_template_type_INDEX` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务活动模板';
+
+-- ----------------------------
+-- Table structure for activity_workflow_r
+-- ----------------------------
+DROP TABLE IF EXISTS `activity_workflow_r`;
+CREATE TABLE `activity_workflow_r` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `activity_id` varchar(32) NOT NULL COMMENT '活动id',
+  `project_id` varchar(32) NOT NULL COMMENT '项目id',
+  `workflow_id` varchar(32) NOT NULL COMMENT '流程单号',
+  `workflow_name` varchar(64) DEFAULT NULL COMMENT '流程名称',
+  `activity_name` varchar(64) DEFAULT NULL COMMENT '任务活动名称',
+  `template_id` varchar(64) DEFAULT NULL COMMENT '模板id',
+  `workflow_status` varchar(32) NOT NULL COMMENT '流程状态',
+  `is_first` int(1) DEFAULT '0' COMMENT ' 0：不是;1:是活动第一次关联流程',
+  `attr_string1` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `work_space` varchar(500) DEFAULT NULL COMMENT ' 流程跳转url空间',
+  `attr_string2` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `activity_workflow_r_index` (`activity_id`,`project_id`,`workflow_id`,`workflow_status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目活动与流程关系表';
+
+-- ----------------------------
+-- Table structure for attachments
+-- ----------------------------
+DROP TABLE IF EXISTS `attachments`;
+CREATE TABLE `attachments` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `relation_id` varchar(32) DEFAULT NULL COMMENT '关联来源附件id，如流程id、checklistId',
+  `s3_key` varchar(64) DEFAULT NULL COMMENT 's3key',
+  `bucket_name` varchar(64) DEFAULT NULL COMMENT '桶名',
+  `file_size` varchar(64) DEFAULT NULL COMMENT '文件大小',
+  `file_name` varchar(64) NOT NULL COMMENT '文件名称',
+  `file_type` varchar(64) DEFAULT NULL COMMENT '文件类型doc，xls...',
+  `status` varchar(64) NOT NULL COMMENT '状态',
+  `order_` int(2) NOT NULL COMMENT '顺序',
+  `attr_string1` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string2` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `attachments_INDEX` (`s3_key`,`file_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='附件表';
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 
