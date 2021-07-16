@@ -673,6 +673,362 @@ CREATE TABLE `project_activity_doc` (
   PRIMARY KEY (`id`),
   KEY `project_activity_doc_INDEX` (`project_id`,`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目活动文档表';
+
+-- ----------------------------
+-- Table structure for attribute_definition
+-- ----------------------------
+DROP TABLE IF EXISTS `attribute_definition`;
+CREATE TABLE `attribute_definition` (
+  `id` varchar(50) NOT NULL COMMENT '主键',
+  `code` varchar(100) DEFAULT NULL COMMENT '属性code',
+  `object_type` varchar(100) DEFAULT NULL COMMENT '类型，默认Attribute',
+  `name_zh` varchar(100) DEFAULT NULL COMMENT '中文名称',
+  `name_en` varchar(100) DEFAULT NULL COMMENT '英文描述',
+  `description` varchar(200) DEFAULT NULL COMMENT '描述信息',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `attribute_definition_code_UNIQUE` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='全局属性定义表';
+
+-- ----------------------------
+-- Table structure for cmda_business_type_config
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_business_type_config`;
+CREATE TABLE `cmda_business_type_config` (
+  `id` varchar(50) NOT NULL,
+  `business_type` varchar(50) DEFAULT NULL COMMENT '业务类型',
+  `service_name` varchar(50) DEFAULT NULL COMMENT 'service类名',
+  `businessCode` varchar(50) DEFAULT NULL COMMENT '业务codeCode',
+  `general_service_name` varchar(50) DEFAULT NULL COMMENT '通用逻辑处理类',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` int(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  `description` varchar(2000) DEFAULT NULL COMMENT '描述信息',
+  PRIMARY KEY (`id`),
+  KEY `cmda_business_type_config_business_type_INDEX` (`business_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务配置service类';
+
+-- ----------------------------
+-- Table structure for cmda_category
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_category`;
+CREATE TABLE `cmda_category` (
+  `id` varchar(32) NOT NULL,
+  `parent_id` varchar(32) DEFAULT NULL COMMENT '父节点id',
+  `category_type` varchar(32) DEFAULT NULL COMMENT '目录结构树类型',
+  `category_name` varchar(32) DEFAULT NULL COMMENT '节点名称',
+  `category_name_en` varchar(32) DEFAULT NULL COMMENT '节点英文名称',
+  `category_level` varchar(100) DEFAULT NULL COMMENT '节点层级',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` int(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='目录分类树形表';
+
+-- ----------------------------
+-- Table structure for cmda_category_template_r
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_category_template_r`;
+CREATE TABLE `cmda_category_template_r` (
+  `id` varchar(32) NOT NULL,
+  `category_id` varchar(32) DEFAULT NULL COMMENT '分类id',
+  `template_id` varchar(32) DEFAULT NULL COMMENT '模板id，如果是配置平台的则模板code',
+  `template_name` varchar(32) DEFAULT NULL COMMENT '模板名称',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` int(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分类节点模板关系形表';
+
+-- ----------------------------
+-- Table structure for cmda_config_enum
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_config_enum`;
+CREATE TABLE `cmda_config_enum` (
+  `id` varchar(32) NOT NULL,
+  `enum_code` varchar(32) DEFAULT NULL COMMENT '枚举编码',
+  `enum_name` varchar(32) DEFAULT NULL COMMENT '枚举名称',
+  `en_name` varchar(32) DEFAULT NULL COMMENT '枚举英文名称',
+  `group_name` varchar(100) DEFAULT NULL COMMENT '分组名称，可以为空',
+  `enum_desc` varchar(32) DEFAULT NULL COMMENT '描述',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` int(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='枚举表';
+
+-- ----------------------------
+-- Table structure for cmda_config_enum_values_r
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_config_enum_values_r`;
+CREATE TABLE `cmda_config_enum_values_r` (
+  `id` varchar(32) NOT NULL,
+  `enum_code` varchar(32) DEFAULT NULL COMMENT '枚举编码',
+  `enum_value` varchar(32) DEFAULT NULL COMMENT '值编码',
+  `enum_name` varchar(32) DEFAULT NULL COMMENT '值名称',
+  `enum_value_desc` varchar(32) DEFAULT NULL COMMENT '说明',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` int(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='枚举表';
+
+-- ----------------------------
+-- Table structure for cmda_config_obj_header
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_config_obj_header`;
+CREATE TABLE `cmda_config_obj_header` (
+  `id` varchar(32) NOT NULL,
+  `obj_type` varchar(250) NOT NULL COMMENT '对象类型',
+  `template_id` varchar(200) DEFAULT NULL COMMENT '模板id',
+  `real_name` varchar(32) DEFAULT NULL COMMENT '对外显示的名称（界面值）',
+  `alias_name` varchar(32) DEFAULT NULL COMMENT '存储名称（存到对象表名称,字段attr）',
+  `real_code` varchar(32) DEFAULT NULL COMMENT '对象属性field',
+  `description` varchar(32) DEFAULT NULL COMMENT '描述',
+  `outer_id` varchar(32) DEFAULT NULL COMMENT '外部数据component_id，如：配置属性id值',
+  `outer_form_id` varchar(32) DEFAULT NULL COMMENT '外部数据form_id，如：配置表单值',
+  `herf_url` varchar(100) DEFAULT NULL COMMENT '字段是超链接时，有值',
+  `order_` int(2) DEFAULT NULL COMMENT '对象顺序用来调整界面显示用',
+  `show_flag` int(2) DEFAULT NULL COMMENT '用户是否已勾选',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` int(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `cmda_config_obj_header_obj_type_INDEX` (`id`,`obj_type`,`template_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配置对象头表';
+
+-- ----------------------------
+-- Table structure for cmda_config_obj_type
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_config_obj_type`;
+CREATE TABLE `cmda_config_obj_type` (
+  `id` varchar(32) NOT NULL,
+  `obj_type` varchar(250) NOT NULL COMMENT '对象类型编码(相同模板他table_code不同obj_type不同，obj_code不同obj_type可相同)',
+  `template_id` varchar(200) DEFAULT NULL COMMENT '模板id',
+  `base_code` varchar(32) DEFAULT NULL COMMENT '对应配置平台的basecardid，逗号分隔',
+  `table_code` varchar(32) DEFAULT NULL COMMENT '对应配置平台的form_id',
+  `parent_id` varchar(32) DEFAULT NULL COMMENT '对象父id',
+  `description` varchar(32) DEFAULT NULL COMMENT '描述',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` int(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `cmda_config_obj_type_INDEX` (`id`,`obj_type`,`template_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='对象类型表';
+
+-- ----------------------------
+-- Table structure for cmda_obj_instance
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_obj_instance`;
+CREATE TABLE `cmda_obj_instance` (
+  `id` varchar(32) NOT NULL,
+  `parent_id` varchar(32) DEFAULT NULL COMMENT '父id，当有父子层级的时候有值',
+  `obj_level` int(2) NOT NULL COMMENT '层级，第一层level为1，',
+  `instance_id` varchar(64) DEFAULT NULL COMMENT '配置平台实例id或内部实例id',
+  `obj_name` varchar(32) DEFAULT NULL COMMENT '对象实例名称',
+  `obj_type` varchar(250) NOT NULL COMMENT '对象类型',
+  `template_id` varchar(200) DEFAULT NULL COMMENT '模板id',
+  `category_id` varchar(32) DEFAULT NULL COMMENT '节点id',
+  `oid` varchar(32) DEFAULT NULL COMMENT '对象id',
+  `number` varchar(64) DEFAULT NULL COMMENT '对象编码',
+  `order_` int(11) DEFAULT NULL COMMENT '顺序',
+  `attr1` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr2` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr3` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr4` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr5` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr6` varchar(500) DEFAULT NULL COMMENT '属性',
+  `attr7` varchar(500) DEFAULT NULL COMMENT '属性',
+  `attr8` varchar(500) DEFAULT NULL COMMENT '属性',
+  `attr9` varchar(500) DEFAULT NULL COMMENT '属性',
+  `attr10` varchar(500) DEFAULT NULL COMMENT '属性',
+  `attr11` varchar(500) DEFAULT NULL COMMENT '属性',
+  `attr12` varchar(500) DEFAULT NULL COMMENT '属性',
+  `attr13` varchar(500) DEFAULT NULL COMMENT '属性',
+  `attr14` text COMMENT '属性',
+  `attr15` text COMMENT '属性',
+  `attr16` text COMMENT '属性',
+  `attr17` text COMMENT '属性',
+  `attr18` text COMMENT '属性',
+  `attr19` text COMMENT '属性',
+  `attr20` text COMMENT '属性',
+  `attr21` text COMMENT '属性',
+  `attr22` text COMMENT '属性',
+  `attr23` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr24` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr25` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr26` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr27` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr28` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr29` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr30` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr31` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr32` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr33` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr34` varchar(255) DEFAULT NULL COMMENT '属性',
+  `attr35` varchar(255) DEFAULT NULL COMMENT '属性',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` int(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `cmda_obj_instance_attr_INDEX` (`attr1`,`attr2`,`attr3`,`attr4`),
+  KEY `cmda_obj_instance_instance_id_INDEX` (`id`,`instance_id`,`template_id`,`category_id`,`oid`,`number`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配置出的对象实例表';
+
+-- ----------------------------
+-- Table structure for cmda_operation_log
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_operation_log`;
+CREATE TABLE `cmda_operation_log` (
+  `id` varchar(32) NOT NULL,
+  `instance_id` varchar(64) NOT NULL COMMENT '实例id',
+  `oid` varchar(100) DEFAULT NULL COMMENT '对象id',
+  `number` varchar(100) DEFAULT NULL COMMENT '编码',
+  `node_id` varchar(100) DEFAULT NULL COMMENT '节点id',
+  `node_name` varchar(100) DEFAULT NULL COMMENT '节点名称',
+  `action` varchar(512) DEFAULT NULL COMMENT '动作',
+  `operator` varchar(100) DEFAULT NULL COMMENT '操作人UserCN',
+  `comment` varchar(1000) DEFAULT NULL COMMENT '节点id',
+  `attr1` varchar(100) DEFAULT NULL COMMENT '扩展字段',
+  `attr2` varchar(100) DEFAULT NULL COMMENT '扩展字段',
+  `attr3` varchar(100) DEFAULT NULL COMMENT '扩展字段',
+  `attr4` varchar(100) DEFAULT NULL COMMENT '扩展字段',
+  `attr5` varchar(100) DEFAULT NULL COMMENT '扩展字段',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` int(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `cmda_operation_log_INDEX` (`id`,`instance_id`,`oid`,`number`,`node_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='操作日志表';
+
+-- ----------------------------
+-- Table structure for cmda_problem_focus
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_problem_focus`;
+CREATE TABLE `cmda_problem_focus` (
+  `id` varchar(64) NOT NULL COMMENT '主键',
+  `instance_id` varchar(200) DEFAULT NULL COMMENT '项目Id',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `problem_id` varchar(64) DEFAULT NULL COMMENT '问题id',
+  `focus_user_id` varchar(64) DEFAULT NULL COMMENT '关注人userId',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` tinyint(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  `project_id` varchar(64) DEFAULT NULL COMMENT '项目id',
+  PRIMARY KEY (`id`),
+  KEY `cmda_problem_focus_problem_id_index` (`problem_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='我关注的问题';
+
+-- ----------------------------
+-- Table structure for cmda_problem_instance
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_problem_instance`;
+CREATE TABLE `cmda_problem_instance` (
+  `id` varchar(64) NOT NULL COMMENT '主键',
+  `problem_number` varchar(32) DEFAULT NULL COMMENT '问题编码',
+  `project_id` varchar(100) DEFAULT NULL COMMENT '项目Id',
+  `project_name` varchar(100) DEFAULT NULL COMMENT '项目名称',
+  `problem_type` varchar(32) DEFAULT NULL COMMENT '问题类型',
+  `target_state` varchar(32) DEFAULT NULL COMMENT '问题生命周期状态',
+  `process_state` varchar(30) DEFAULT NULL COMMENT '流程状态',
+  `process_id` varchar(50) DEFAULT NULL,
+  `ref_id` varchar(64) DEFAULT NULL,
+  `ref_name` varchar(100) DEFAULT NULL COMMENT '关联名称',
+  `problem_discovery_phase` varchar(50) DEFAULT NULL COMMENT '问题发现阶段',
+  `problem_original_source` varchar(32) DEFAULT NULL COMMENT '问题的原始来源',
+  `problem_raiser` varchar(300) DEFAULT NULL COMMENT '问题提出人',
+  `severity` varchar(32) DEFAULT NULL COMMENT '问题严重程度',
+  `expected_resolution_date` date DEFAULT NULL COMMENT '期望解决日期',
+  `brief_description` varchar(500) DEFAULT NULL COMMENT '简要描述',
+  `detail_description` varchar(200) DEFAULT NULL COMMENT '详细描述',
+  `hand_suggestions` varchar(500) DEFAULT NULL COMMENT '处理建议',
+  `hand_suggestions_img` varchar(500) DEFAULT NULL COMMENT '修改建议图片说明',
+  `duplicated_flag` tinyint(1) DEFAULT NULL COMMENT '是否重复问题',
+  `reproblem_no` varchar(50) DEFAULT NULL,
+  `finished_change_flag` tinyint(4) DEFAULT NULL COMMENT '是否完成更改',
+  `issue_review_conclusion` varchar(500) DEFAULT NULL COMMENT '问题评审结论',
+  `issue_review_conclusion_img` varchar(500) DEFAULT NULL COMMENT '问题评审结论图片说明',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` tinyint(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `cmda_problem_instance_project_id_index` (`project_id`),
+  KEY `cmda_problem_instance_problem_number_index` (`problem_number`),
+  KEY `cmda_problem_instance_ref_id_index` (`ref_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='问题实例数据';
+
+-- ----------------------------
+-- Table structure for cmda_problem_tracking
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_problem_tracking`;
+CREATE TABLE `cmda_problem_tracking` (
+  `id` varchar(64) DEFAULT NULL COMMENT '主键',
+  `instanceId` varchar(32) DEFAULT NULL COMMENT '关联的问题ID',
+  `content` varchar(200) DEFAULT NULL COMMENT 'key',
+  `tracking_order` int(10) DEFAULT NULL COMMENT 'value',
+  `remark` varchar(300) DEFAULT NULL COMMENT '备注',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` tinyint(1) DEFAULT NULL COMMENT '是否删除(false:未删除；true:已删除)'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='问题进展跟踪';
+
+-- ----------------------------
+-- Table structure for cmda_report_attributes
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_report_attributes`;
+CREATE TABLE `cmda_report_attributes` (
+  `attribute_discription` varchar(100) DEFAULT NULL COMMENT '属性描述信息',
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `attribute_name` varchar(32) DEFAULT NULL COMMENT '属性名称',
+  `is_standard_attribute` tinyint(4) DEFAULT NULL COMMENT '是否标准属性',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `deleted_flag` tinyint(4) DEFAULT NULL COMMENT '是否可用，0可用，1不可用',
+  `last_update_date` datetime DEFAULT NULL COMMENT '最新修改时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '修改者',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报表属性集合表';
 /**
  *
  */
