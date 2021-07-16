@@ -221,6 +221,458 @@ CREATE TABLE `team_template` (
   PRIMARY KEY (`id`),
   KEY `team_member_template_obj_type_INDEX` (`object_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='团队模板';
+
+DROP TABLE IF EXISTS `project_instance`;
+CREATE TABLE `project_instance` (
+  `id` varchar(50) NOT NULL COMMENT '主键',
+  `name` varchar(50) DEFAULT NULL COMMENT '项目内部名称',
+  `external_name` varchar(100) DEFAULT NULL COMMENT '项目外部名称',
+  `number` varchar(100) DEFAULT NULL COMMENT '项目编号',
+  `project_type` varchar(200) DEFAULT NULL COMMENT '项目类别',
+  `confidentiality_level` int(1) DEFAULT NULL COMMENT '保密级别',
+  `project_mode` varchar(50) DEFAULT NULL COMMENT '项目模式',
+  `reference_team_object_type` varchar(50) DEFAULT NULL COMMENT '引用的项目团队模板类型',
+  `type_id` varchar(50) DEFAULT NULL COMMENT '类型id',
+  `plan_template_id` varchar(50) DEFAULT NULL COMMENT '计划模板id',
+  `description` varchar(1000) DEFAULT NULL COMMENT '描述信息',
+  `status` int(11) DEFAULT NULL COMMENT '项目状态',
+  `attr_string1` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string2` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string3` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string4` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string5` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_int1` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `attr_int2` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `attr_int3` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `attr_date1` datetime DEFAULT NULL COMMENT '扩展字段date',
+  `attr_date2` datetime DEFAULT NULL COMMENT '展字段date',
+  `attr_date3` datetime DEFAULT NULL COMMENT '展字段date',
+  `attr_date4` datetime DEFAULT NULL COMMENT '展字段date',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `project_instance_template_id_index` (`type_id`),
+  KEY `project_instance_plan_template_name_INDEX` (`name`),
+  KEY `project_instance_plan_template_id_INDEX` (`plan_template_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目实例对象';
+
+-- ----------------------------
+-- Table structure for project_instance_r
+-- ----------------------------
+DROP TABLE IF EXISTS `project_instance_r`;
+CREATE TABLE `project_instance_r` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `project_id` varchar(50) DEFAULT NULL COMMENT '中台项目id',
+  `ref_id` varchar(20) DEFAULT NULL COMMENT '关联对对象id',
+  `ref_name` varchar(200) DEFAULT NULL COMMENT '关联对对象名称',
+  `ref_type` varchar(100) DEFAULT NULL COMMENT '关联的类型',
+  `description` varchar(100) DEFAULT NULL COMMENT '描述信息',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `project_instance_r_project_id_INDEX` (`project_id`,`ref_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目与其他系统对象的关系';
+
+-- ----------------------------
+-- Table structure for project_plan
+-- ----------------------------
+DROP TABLE IF EXISTS `project_plan`;
+CREATE TABLE `project_plan` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `project_id` varchar(32) NOT NULL COMMENT '项目id',
+  `object_type` varchar(100) DEFAULT NULL COMMENT '内码',
+  `plan_template_id` varchar(32) DEFAULT NULL COMMENT '计划模板id',
+  `name` varchar(100) NOT NULL COMMENT '计划名称',
+  `arch_pass_date` datetime DEFAULT NULL COMMENT '架设评审通过时间',
+  `start_mold_date` datetime DEFAULT NULL COMMENT '投摸时间',
+  `fot_date` datetime DEFAULT NULL COMMENT 'FOT时间',
+  `sv1_date` datetime DEFAULT NULL COMMENT 'SV1准出时间',
+  `sv2_date` datetime DEFAULT NULL COMMENT 'SV2准出时间',
+  `sv3_date` datetime DEFAULT NULL COMMENT 'SV3准出时间',
+  `description` varchar(500) DEFAULT NULL COMMENT '描述',
+  `main_plan_flag` int(1) NOT NULL COMMENT '是否主计划,一个项目只有一个主计划',
+  `sample_approval_date` datetime DEFAULT NULL COMMENT '签样时间',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  `attr_string1` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string2` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string3` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string4` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string5` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_int1` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `attr_int2` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `attr_int3` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `part_supplier_id` varchar(500) DEFAULT NULL COMMENT '部件与供应商关系id,如果是非主计划时字段必填',
+  PRIMARY KEY (`id`),
+  KEY `activity_doc_template_INDEX` (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目计划关系表';
+
+-- ----------------------------
+-- Table structure for project_recently_viewed
+-- ----------------------------
+DROP TABLE IF EXISTS `project_recently_viewed`;
+CREATE TABLE `project_recently_viewed` (
+  `id` varchar(32) NOT NULL,
+  `oid` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL COMMENT '项目名称',
+  `type` varchar(32) DEFAULT NULL COMMENT 'product,library',
+  `last_update_date` datetime DEFAULT NULL,
+  `user_id` varchar(32) DEFAULT NULL,
+  `material_category` varchar(255) DEFAULT NULL COMMENT '物料类别',
+  `deleted_flag` int(1) DEFAULT NULL COMMENT '0启用，1禁用',
+  `creation_date` datetime DEFAULT NULL,
+  `created_by` varchar(32) DEFAULT NULL,
+  `last_updated_by` varchar(32) DEFAULT NULL,
+  `tenant_code` varchar(32) DEFAULT NULL,
+  `project_category` varchar(255) DEFAULT NULL COMMENT '项目类别',
+  `new_projectId` varchar(255) DEFAULT NULL COMMENT '中台项目id',
+  PRIMARY KEY (`id`),
+  KEY `userid_index` (`user_id`),
+  KEY `oid_index` (`oid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目最近浏览记录表';
+
+-- ----------------------------
+-- Table structure for project_supplier
+-- ----------------------------
+DROP TABLE IF EXISTS `project_supplier`;
+CREATE TABLE `project_supplier` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `project_id` varchar(32) NOT NULL COMMENT '项目id',
+  `object_type` varchar(100) DEFAULT NULL COMMENT '内码',
+  `supplier_code` varchar(32) NOT NULL COMMENT '供应商编码',
+  `supplier_name` varchar(500) DEFAULT NULL COMMENT '供应商名称',
+  `order_` int(20) DEFAULT NULL COMMENT '序号',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `project_supplier_id_index` (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目供应商关系表';
+
+-- ----------------------------
+-- Table structure for cmda_report_config_rule
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_report_config_rule`;
+CREATE TABLE `cmda_report_config_rule` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `report_name` varchar(32) DEFAULT NULL COMMENT '报表名称',
+  `attribute_name` varchar(200) DEFAULT NULL COMMENT '统计维度（属性名称）,多个属性逗号隔开，最多支持5个属性维度',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `type_ref` varchar(32) NOT NULL COMMENT '统计类型',
+  `report_code` varchar(32) DEFAULT NULL COMMENT '规则编码',
+  `container` varchar(32) DEFAULT NULL COMMENT '是否按项目统计',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update_date` datetime DEFAULT NULL COMMENT '最新修改时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '修改者',
+  `deleted_flag` tinyint(4) DEFAULT NULL COMMENT '是否可用，0可用，1不可用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报表规则配置表';
+
+-- ----------------------------
+-- Table structure for cmda_report_instance
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_report_instance`;
+CREATE TABLE `cmda_report_instance` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `attr1_value` varchar(100) DEFAULT NULL COMMENT '维度值1',
+  `attr2_value` varchar(100) DEFAULT NULL COMMENT '维度值2',
+  `attr3_value` varchar(100) DEFAULT NULL COMMENT '维度值3',
+  `attr4_value` varchar(100) DEFAULT NULL COMMENT '维度值4',
+  `attr5_value` varchar(100) DEFAULT NULL COMMENT '维度值5',
+  `attr6_value` varchar(100) DEFAULT NULL COMMENT '维度值6',
+  `attr7_value` varchar(100) DEFAULT NULL COMMENT '维度值7',
+  `attr8_value` varchar(100) DEFAULT NULL COMMENT '维度值8',
+  `total_count` int(11) DEFAULT NULL COMMENT '数量',
+  `report_config_rule_id` varchar(32) NOT NULL COMMENT '报表统计规则配置表ID',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `deleted_flag` tinyint(4) DEFAULT NULL COMMENT '是否可用，0可用，1不可用',
+  `last_update_date` datetime DEFAULT NULL COMMENT '最新修改时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '修改者',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `type_ref` varchar(32) NOT NULL COMMENT '统计类型',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报表统计实例';
+
+-- ----------------------------
+-- Table structure for cmda_report_task
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_report_task`;
+CREATE TABLE `cmda_report_task` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `task_name` varchar(32) DEFAULT NULL COMMENT '任务名称',
+  `report_config_rule_id` varchar(32) NOT NULL COMMENT '报表统计规则id，外键',
+  `is_one` tinyint(4) DEFAULT NULL COMMENT '是否执行一次',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `frequency` int(11) DEFAULT NULL COMMENT '执行频率，单位是分钟',
+  `last_execution_time` datetime DEFAULT NULL COMMENT '上次执行时间',
+  `state` varchar(32) DEFAULT NULL COMMENT '状态、wait/running/discarded',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update_date` datetime DEFAULT NULL COMMENT '最新修改时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '修改者',
+  `deleted_flag` tinyint(4) DEFAULT NULL COMMENT '是否可用，0可用，1不可用',
+  `msg` text COMMENT '记录任务的执行情况 ',
+  `type_ref` varchar(32) NOT NULL COMMENT '统计类型',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='报表规则配置表';
+
+-- ----------------------------
+-- Table structure for cmda_stringvalue_data
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_stringvalue_data`;
+CREATE TABLE `cmda_stringvalue_data` (
+  `id` varchar(64) NOT NULL COMMENT '主键',
+  `component_code` varchar(100) DEFAULT NULL,
+  `attribute_name` varchar(200) NOT NULL COMMENT '属性名称',
+  `stringvalue` varchar(100) DEFAULT NULL COMMENT '属性值',
+  `instance_type_id` varchar(32) DEFAULT NULL COMMENT '业务实例Id',
+  `business_type_name` varchar(32) DEFAULT NULL COMMENT '业务类型',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` tinyint(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `cmda_stringvalue_data_attribute_name_index` (`attribute_name`),
+  KEY `cmda_stringvalue_data_instance_type_id_index` (`instance_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='问题实例数据';
+
+-- ----------------------------
+-- Table structure for cmda_task_info
+-- ----------------------------
+DROP TABLE IF EXISTS `cmda_task_info`;
+CREATE TABLE `cmda_task_info` (
+  `id` varchar(64) NOT NULL COMMENT '主键',
+  `task_name` varchar(50) DEFAULT NULL COMMENT '任务名称',
+  `task_role` varchar(30) DEFAULT NULL COMMENT '任务承担者角色',
+  `task_owner` varchar(50) DEFAULT NULL COMMENT '任务所有者',
+  `task_complete_by` varchar(50) DEFAULT NULL COMMENT '任务完成者',
+  `task_state` varchar(20) DEFAULT NULL COMMENT '任务状态/Open/Finished',
+  `ref_business_id` varchar(50) DEFAULT NULL COMMENT '关联的业务实例ID',
+  `vote` varchar(50) DEFAULT NULL COMMENT '路由投票',
+  `comments` varchar(1000) DEFAULT NULL COMMENT '备注',
+  `tenant_code` varchar(32) DEFAULT NULL COMMENT '租户',
+  `creation_date` datetime DEFAULT NULL COMMENT '创建时间',
+  `created_by` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `last_update_date` datetime DEFAULT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `deleted_flag` tinyint(1) DEFAULT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  KEY `cmda_task_info_ref_business_id_index` (`ref_business_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务表';
+
+-- ----------------------------
+-- Table structure for flyway_schema_history
+-- ----------------------------
+DROP TABLE IF EXISTS `flyway_schema_history`;
+CREATE TABLE `flyway_schema_history` (
+  `installed_rank` int(11) NOT NULL,
+  `version` varchar(50) DEFAULT NULL,
+  `description` varchar(200) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `script` varchar(1000) NOT NULL,
+  `checksum` int(11) DEFAULT NULL,
+  `installed_by` varchar(100) NOT NULL,
+  `installed_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `execution_time` int(11) NOT NULL,
+  `success` tinyint(1) NOT NULL,
+  PRIMARY KEY (`installed_rank`),
+  KEY `flyway_schema_history_s_idx` (`success`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for iba_attribute_instance_data
+-- ----------------------------
+DROP TABLE IF EXISTS `iba_attribute_instance_data`;
+CREATE TABLE `iba_attribute_instance_data` (
+  `id` varchar(50) NOT NULL COMMENT '主键',
+  `attribute_definition_id` varchar(32) DEFAULT NULL COMMENT '属性定义的id',
+  `attribute_value` varchar(500) DEFAULT NULL COMMENT '属性值',
+  `attribute_value_text` text COMMENT '属性值text',
+  `instance_type_id` varchar(32) DEFAULT NULL COMMENT '业务实例Id',
+  `instance_type_name` varchar(100) DEFAULT NULL COMMENT '业务类型',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `iba_attribute_instance_data_attribute_definition_id_INDEX` (`attribute_definition_id`),
+  KEY `iba_attribute_instance_data_instance_type_id_index` (`instance_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='iba属性实例表';
+
+-- ----------------------------
+-- Table structure for part_supplier
+-- ----------------------------
+DROP TABLE IF EXISTS `part_supplier`;
+CREATE TABLE `part_supplier` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `project_id` varchar(32) NOT NULL COMMENT '项目id',
+  `object_type` varchar(100) DEFAULT NULL COMMENT '内码',
+  `project_supplier_id` varchar(32) NOT NULL COMMENT '项目供应商id',
+  `part_name` varchar(64) NOT NULL COMMENT '产品部件',
+  `supplier_sub_account` varchar(64) DEFAULT NULL COMMENT '供应商子账号，每行都会在GDP生成子账号',
+  `cooperate_state` int(1) NOT NULL COMMENT '供应商合作状态（0正常合作；1终止合作）',
+  `termination_reason` varchar(2000) DEFAULT NULL COMMENT '终止合作原因说明',
+  `termination_s3` varchar(255) DEFAULT NULL COMMENT '终止合作说明附件s3',
+  `group_id` varchar(64) NOT NULL COMMENT '同一行，组号相同则需要合并',
+  `order_` int(20) DEFAULT NULL COMMENT '序号',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `part_supplier_index` (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目部件供应商关系表';
+
+-- ----------------------------
+-- Table structure for plan_template
+-- ----------------------------
+DROP TABLE IF EXISTS `plan_template`;
+CREATE TABLE `plan_template` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `object_type` varchar(100) DEFAULT NULL COMMENT '类型，内码',
+  `name` varchar(100) NOT NULL COMMENT '计划模板名称',
+  `active` int(1) DEFAULT NULL COMMENT '启用状态 0启用 1禁用',
+  `version` varchar(20) DEFAULT NULL COMMENT '版本',
+  `material_category` varchar(100) DEFAULT NULL COMMENT '适用物料类别',
+  `project_category` varchar(100) DEFAULT NULL COMMENT '使用项目类别',
+  `order_` int(20) NOT NULL COMMENT '序号',
+  `attr_string1` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string2` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string3` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string4` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string5` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_int1` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `attr_int2` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `attr_int3` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `attr_date1` datetime DEFAULT NULL COMMENT '扩展字段date',
+  `attr_date2` datetime DEFAULT NULL COMMENT '展字段date',
+  `attr_date3` datetime DEFAULT NULL COMMENT '展字段date',
+  `attr_date4` datetime DEFAULT NULL COMMENT '展字段date',
+  `description` varchar(200) DEFAULT NULL COMMENT '描述信息',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `plan_template_name_INDEX` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='计划模板';
+
+-- ----------------------------
+-- Table structure for project_activity
+-- ----------------------------
+DROP TABLE IF EXISTS `project_activity`;
+CREATE TABLE `project_activity` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `project_id` varchar(32) NOT NULL COMMENT '项目id',
+  `object_type` varchar(100) DEFAULT NULL COMMENT '内码',
+  `plan_id` varchar(32) NOT NULL COMMENT '项目计划id',
+  `name` varchar(100) NOT NULL COMMENT '活动名称',
+  `role_key` varchar(100) DEFAULT NULL COMMENT '任务承担角色',
+  `account` varchar(20) DEFAULT NULL COMMENT '任务承担人',
+  `type` varchar(100) NOT NULL COMMENT 'type  类型 （阶段、活动、事务任务...）',
+  `level_` int(1) NOT NULL COMMENT '层级',
+  `status` int(1) NOT NULL COMMENT '活动状态(未开启、进行中、已暂停)',
+  `critical` int(1) DEFAULT NULL COMMENT '是否有风险',
+  `risk_type` varchar(32) DEFAULT NULL COMMENT '风险类型',
+  `risk_description` varchar(32) DEFAULT NULL COMMENT '风险描述',
+  `feedback` varchar(32) DEFAULT NULL COMMENT '是否需要反馈',
+  `feedback_role` varchar(255) DEFAULT NULL COMMENT '反馈角色',
+  `task_closed_role` varchar(32) DEFAULT NULL COMMENT '任务关闭确认角色',
+  `divisive_supplier` varchar(20) DEFAULT NULL COMMENT '是否区分供应商',
+  `confidentiality_type` varchar(200) DEFAULT NULL COMMENT '保密级别',
+  `close_role` varchar(200) DEFAULT NULL COMMENT '任务关闭确认角色',
+  `deliverables` text COMMENT '交付件列表',
+  `description` text COMMENT '任务说明',
+  `ref_process` varchar(512) DEFAULT NULL COMMENT '关联流程',
+  `ref_process_instance_id` varchar(64) DEFAULT NULL COMMENT '关联流程id',
+  `plan_start_date` datetime DEFAULT NULL COMMENT '计划开始时间',
+  `plan_finish_date` datetime DEFAULT NULL COMMENT '计划完成时间',
+  `actual_start_date` datetime DEFAULT NULL COMMENT '实际开始时间',
+  `actual_finish_date` datetime DEFAULT NULL COMMENT '实际完成时间',
+  `order_` varchar(20) NOT NULL COMMENT '序号',
+  `category_order` varchar(50) DEFAULT NULL COMMENT '目录序号 如 1-1',
+  `parent_id` varchar(32) DEFAULT NULL COMMENT '父项id,关联的计划或活动id',
+  `attr_string1` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string2` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string3` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string4` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string5` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_int1` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `attr_int2` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `attr_int3` int(11) DEFAULT NULL COMMENT '扩展字段int',
+  `attr_date1` datetime DEFAULT NULL COMMENT '扩展字段date',
+  `attr_date2` datetime DEFAULT NULL COMMENT '展字段date',
+  `attr_date3` datetime DEFAULT NULL COMMENT '展字段date',
+  `attr_date4` datetime DEFAULT NULL COMMENT '展字段date',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  `edit` int(1) DEFAULT '1' COMMENT '1:可以编辑 0：不可编辑',
+  `supplier_code` varchar(32) DEFAULT NULL COMMENT '供应商编码',
+  `role_key_mapping` varchar(64) DEFAULT NULL COMMENT '任务承担角色-key',
+  `supplier_name` varchar(255) DEFAULT NULL COMMENT '供应商部件名称',
+  `close_role_name` varchar(255) DEFAULT NULL COMMENT '反馈角色name',
+  `feedback_role_name` varchar(255) DEFAULT NULL COMMENT '任务关闭确认角色name',
+  PRIMARY KEY (`id`),
+  KEY `project_activity_id_index` (`project_id`,`plan_id`,`status`),
+  KEY `ids_parent_id` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目活动表';
+
+-- ----------------------------
+-- Table structure for project_activity_doc
+-- ----------------------------
+DROP TABLE IF EXISTS `project_activity_doc`;
+CREATE TABLE `project_activity_doc` (
+  `id` varchar(32) NOT NULL COMMENT '主键',
+  `project_id` varchar(32) NOT NULL COMMENT '项目id',
+  `activity_id` varchar(32) NOT NULL COMMENT '关联活动id',
+  `ref_doc_template_id` varchar(32) DEFAULT NULL COMMENT '参考文档模板id',
+  `doc_name` text COMMENT '文档名称',
+  `attachment_id` varchar(32) DEFAULT NULL COMMENT '附件表id，间接关联了s3',
+  `doc_type` varchar(32) DEFAULT NULL COMMENT '1、下发文档 2、反馈文档 ',
+  `ref_process` varchar(32) DEFAULT NULL COMMENT '关联流程',
+  `type` varchar(32) DEFAULT NULL COMMENT '活动实例模板类型：doc 文档；url 链接',
+  `ref_process_id` varchar(32) DEFAULT NULL COMMENT '关联流程id',
+  `order_` int(20) DEFAULT NULL COMMENT '序号',
+  `note` varchar(200) DEFAULT NULL COMMENT '备注',
+  `attr_string1` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `attr_string2` varchar(100) DEFAULT NULL COMMENT '扩展字段string',
+  `tenant_code` varchar(32) NOT NULL COMMENT '租户',
+  `creation_date` datetime NOT NULL COMMENT '创建时间',
+  `created_by` varchar(32) NOT NULL COMMENT '创建人',
+  `last_update_date` datetime NOT NULL COMMENT '更新时间',
+  `last_updated_by` varchar(32) NOT NULL COMMENT '更新人',
+  `deleted_flag` int(1) NOT NULL COMMENT '是否删除(0:未删除；1:已删除)',
+  PRIMARY KEY (`id`),
+  KEY `project_activity_doc_INDEX` (`project_id`,`activity_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='项目活动文档表';
 /**
  *
  */
