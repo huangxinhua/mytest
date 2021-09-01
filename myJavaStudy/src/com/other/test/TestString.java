@@ -4,6 +4,20 @@ class One {
 	One(String str) {
 		System.out.println(str);
 	}
+// 	 List uniqueList = groupIds.stream().distinct().collect(Collectors.toList());
+//         // åˆ†ç»„åçš„list
+//         List<List<String>> groupedIdList= Lists.partition(uniqueList,10 );
+//         List<CompletableFuture<ResultBody<List<TyGroupVo>>>> futureList=groupedIdList.
+//             stream().map(
+//                 v->CompletableFuture.supplyAsync(()->{
+//                     ApplicationContextHelper.setApplicationContextUser();
+//                     return queryTyGroupList(v);
+//                 },
+//                 ThreadPoolFactory.executor)).collect(Collectors.toList());
+//         // ç¡®ä¿æ‰€æœ‰çš„ä»»åŠ¡å®Œæˆ
+//         List<ResultBody<List<TyGroupVo>>> resultBeanList =
+//             futureList.stream().map(CompletableFuture::join).collect(Collectors.toList());
+//         Map<String, TyGroupVo> groupVoMap = new HashMap<>();
 }
 
 class Two {
@@ -22,48 +36,48 @@ public class TestString {
 		System.out.println("Two.i=" + Two.l);
 		System.out.println("Two.i=" + Two.l);
 		
-		System.out.println("---Ìâ2----------------" );
-		//ÁíÍâµÄÌâ2 begin
-		String a=new String("a");//¿ª±ÙÒ»¿éĞÂµÄÄÚ´æÊ¹ÓÃ
+		System.out.println("---é¢˜2----------------" );
+		//å¦å¤–çš„é¢˜2 begin
+		String a=new String("a");//å¼€è¾Ÿä¸€å—æ–°çš„å†…å­˜ä½¿ç”¨
 		String b="a";
-		String c="a";//b¡¢cÊÇ¹²ÓÃµÄÒ»¿éÄÚ´æ,Ö»Òª¶ÔÏóĞÅÏ¢Ò»Ñù¾ÍÊÇÍ¬Ò»¿éÄÚ´æ£¬²»Ò»Ñù¾Í»á¿ª±ÙĞÂµÄ
+		String c="a";//bã€cæ˜¯å…±ç”¨çš„ä¸€å—å†…å­˜,åªè¦å¯¹è±¡ä¿¡æ¯ä¸€æ ·å°±æ˜¯åŒä¸€å—å†…å­˜ï¼Œä¸ä¸€æ ·å°±ä¼šå¼€è¾Ÿæ–°çš„
 		System.out.println(a==b);
-		System.out.println(b==c);//ÎªÊ²Ã´ÊÇtrueÄØ
-		//ÁíÍâµÄÌâ2 end
-		//¿¼µÄÊÇÄÚ´æ·ÖÅäµÄÎÊÌâ
+		System.out.println(b==c);//ä¸ºä»€ä¹ˆæ˜¯trueå‘¢
+		//å¦å¤–çš„é¢˜2 end
+		//è€ƒçš„æ˜¯å†…å­˜åˆ†é…çš„é—®é¢˜
 		
 
-		System.out.println("---Ìâ3----------------" );
+		System.out.println("---é¢˜3----------------" );
 		String str1 = new String("ABC");
 		String str2 = new String("ABC");
 		System.out.println(str1==str2);
-		System.out.println("---Ìâ4----------------" );
+		System.out.println("---é¢˜4----------------" );
 		String str3 = "ABC";
 		String str4 = "ABC";
 		String str5 = "A" + "BC";
 		System.out.println(str3==str4);
 		System.out.println(str4==str5);
 
-		System.out.println("---Ìâ5----------------" );
+		System.out.println("---é¢˜5----------------" );
 		String aa = "ABC";
 		String bb="AB";
 		String cc=bb+"C";
 		System.out.println(aa==cc);
-		/*aºÍb¶¼ÊÇ×Ö·û´®³£Á¿ËùÒÔÔÚ±àÒëÆÚ¾Í±»È·¶¨ÁË£¡
-		¶øcÖĞÓĞ¸öbÊÇÒıÓÃ²»ÊÇ×Ö·û´®³£Á¿ËùÒÔ²»»áÔÚ±àÒëÆÚÈ·¶¨¡£
-		¶øStringÊÇfinalµÄ£¡ËùÒÔÔÚb+"c"µÄÊ±ºòÊµ¼ÊÉÏÊÇĞÂ´´½¨ÁËÒ»¸ö¶ÔÏó£¬È»ºóÔÚ°ÑĞÂ´´½¨¶ÔÏóµÄÒıÓÃ´«¸øc.*/
-		System.out.println("---Ìâ6-----test --/++ -----------" );
+		/*aå’Œbéƒ½æ˜¯å­—ç¬¦ä¸²å¸¸é‡æ‰€ä»¥åœ¨ç¼–è¯‘æœŸå°±è¢«ç¡®å®šäº†ï¼
+		è€Œcä¸­æœ‰ä¸ªbæ˜¯å¼•ç”¨ä¸æ˜¯å­—ç¬¦ä¸²å¸¸é‡æ‰€ä»¥ä¸ä¼šåœ¨ç¼–è¯‘æœŸç¡®å®šã€‚
+		è€ŒStringæ˜¯finalçš„ï¼æ‰€ä»¥åœ¨b+"c"çš„æ—¶å€™å®é™…ä¸Šæ˜¯æ–°åˆ›å»ºäº†ä¸€ä¸ªå¯¹è±¡ï¼Œç„¶ååœ¨æŠŠæ–°åˆ›å»ºå¯¹è±¡çš„å¼•ç”¨ä¼ ç»™c.*/
+		System.out.println("---é¢˜6-----test --/++ -----------" );
 		int x=1,y=2,z=3;
 		System.out.println(y+=z--/++x );
-		System.out.println("---Ìâ7-----test --/++ -----------" );
+		System.out.println("---é¢˜7-----test --/++ -----------" );
 		int xx=2;
 		System.out.println((xx++)/3);
 		
-		System.out.println("---Ìâ8-----¹ØÏµÔËËã-----------" );
+		System.out.println("---é¢˜8-----å…³ç³»è¿ç®—-----------" );
 		int yy=10;
 		yy+=yy-=yy-yy;
 		System.out.println(yy);
-		System.out.println("---Ìâ9-----booleanÔËËã-----------" );
+		System.out.println("---é¢˜9-----booleanè¿ç®—-----------" );
 		Boolean m=true;
 		if(m==false)
 		System.out.println("False");
@@ -73,8 +87,8 @@ public class TestString {
 
 	}
 }
-/*¿¼µÄÊÇ¾²Ì¬·½·¨
- * ´ğ°¸
+/*è€ƒçš„æ˜¯é™æ€æ–¹æ³•
+ * ç­”æ¡ˆ
  * 
 one-2
 one-3
