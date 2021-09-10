@@ -20,6 +20,118 @@ class One {
 //         Map<String, TyGroupVo> groupVoMap = new HashMap<>();
 }
 
+
+
+
+
+// 1.排序，带参数类型
+list.sort((String s1, String s2) -> s1.compareTo(s2));
+list.sort(( LibraryDO lib1, LibraryDO lib2) -> lib2.getId().compareTo(lib2.getId()));
+// 使用默认方法排序
+Collections.sort(list, Comparator.comparing(LibraryDO::getId)); //升序
+Collections.reverse(list); // 倒序排列
+//随机打乱顺序
+Collections.shuffle(list);
+//更多排序
+//默认ASC排序）
+List<LibraryDO> collect = users.stream().sorted(Comparator.comparing(LibraryDO::getId)).collect(Collectors.toList());
+//DESC排序）
+List<LibraryDO> collect = users.stream().sorted(Comparator.comparing(LibraryDO::getId).reversed()).collect(Collectors.toList());
+
+// 2.数组去重
+List<String> collect = list.stream().distinct().collect(Collectors.toList());
+// 数组去重转换为字符串
+String joining = list.stream().distinct().collect(Collectors.joining(",")); 
+// 根据对象属性去重
+List<LibraryDO> lib = list.stream().collect(Collectors.collectingAndThen(
+					Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(LibraryDO::getId))), ArrayList<LibraryDO>::new));
+
+// 4.获取对象某一属性返回list
+List<String> collect= list.stream().map(LibraryDO::getId).collect(Collectors.toList());
+// 获取对象某一属性返回数组
+Integer[] array = list.stream().map(LibraryDO::getId).collect(Collectors.toList()).stream().toArray(Integer[]::new);
+// 获取对象某一属性返回数组过滤非空
+Integer[] array = list.stream().map(LibraryDO::getId).filter(x -> x !=null).collect(Collectors.toList()).stream().toArray(Integer[]::new);
+//5.修改对象属性值
+List<LibraryDO> lib = list.stream().map(p -> {p.setId(p.getId() + 1);return p;}).collect(Collectors.toList())
+
+
+Map<String, List<String>> locationMap = locations.stream()
+        .map(s -> s.split(":"))
+        .collect(Collectors.groupingBy(a -> a[0],
+                Collectors.mapping(a -> a[1], Collectors.toList())));
+Map<String,List<ProblemInstanceExtendVo>>problemsByDomain=problemList.stream().collect(Collectors.groupingBy(ProblemInstanceExtendVo::getProblemDomain));
+
+
+List<CompletableFuture<DocumentVO>>futureList=docList.stream()
+.map(v->CompletableFuture.supplyAsync(()->iDocumentThreadTaskService.queryDocDetails(v),ThreadPoolFactory.executor))
+.collect(Collectors.toList());
+
+//CompletableFuture<List<DocumentVO>>docListFuture=CompletableFuture.supplyAsync(()->
+//{
+//ApplicationContextHelper.setApplicationContextUser();
+//returngetDocList(paramVO,userVO);
+//}
+//,ThreadPoolFactory.executor);
+
+//分组后的list
+List<List<String>>groupedIdList=Lists.partition(uniqueList,10);
+
+
+// // 1.排序，带参数类型
+// list.sort((String s1, String s2) -> s1.compareTo(s2));
+// list.sort(( LibraryDO lib1, LibraryDO lib2) -> lib2.getId().compareTo(lib2.getId()));
+// // 使用默认方法排序
+// Collections.sort(list, Comparator.comparing(LibraryDO::getId)); //升序
+// Collections.reverse(list); // 倒序排列
+// //随机打乱顺序
+// Collections.shuffle(list);
+// //更多排序
+// //默认ASC排序）
+// List<LibraryDO> collect = users.stream().sorted(Comparator.comparing(LibraryDO::getId)).collect(Collectors.toList());
+// //DESC排序）
+// List<LibraryDO> collect = users.stream().sorted(Comparator.comparing(LibraryDO::getId).reversed()).collect(Collectors.toList());
+
+// // 2.数组去重
+// List<String> collect = list.stream().distinct().collect(Collectors.toList());
+// // 数组去重转换为字符串
+// String joining = list.stream().distinct().collect(Collectors.joining(",")); 
+// // 根据对象属性去重
+// List<LibraryDO> lib = list.stream().collect(Collectors.collectingAndThen(
+// 					Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(LibraryDO::getId))), ArrayList<LibraryDO>::new));
+
+// // 4.获取对象某一属性返回list
+// List<String> collect= list.stream().map(LibraryDO::getId).collect(Collectors.toList());
+// // 获取对象某一属性返回数组
+// Integer[] array = list.stream().map(LibraryDO::getId).collect(Collectors.toList()).stream().toArray(Integer[]::new);
+// // 获取对象某一属性返回数组过滤非空
+// Integer[] array = list.stream().map(LibraryDO::getId).filter(x -> x !=null).collect(Collectors.toList()).stream().toArray(Integer[]::new);
+// //5.修改对象属性值
+// List<LibraryDO> lib = list.stream().map(p -> {p.setId(p.getId() + 1);return p;}).collect(Collectors.toList())
+
+
+// Map<String, List<String>> locationMap = locations.stream()
+//         .map(s -> s.split(":"))
+//         .collect(Collectors.groupingBy(a -> a[0],
+//                 Collectors.mapping(a -> a[1], Collectors.toList())));
+// Map<String,List<ProblemInstanceExtendVo>>problemsByDomain=problemList.stream().collect(Collectors.groupingBy(ProblemInstanceExtendVo::getProblemDomain));
+// 来自 <https://stackoverflow.com/questions/56389575/how-to-convert-liststring-to-mapstring-liststring-based-on-a-delimeter/56389633> 
+
+
+// /**
+// ————————————————
+// 版权声明：本文为CSDN博主「代码不是马」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+// 原文链接：https://blog.csdn.net/lyp1245387976/article/details/105127290
+
+// Map<String, String> instanceMap = baseInfo.stream().collect(Collectors.toMap(ComponentVo::getCode, ComponentVo::getValue));
+ 
+// objInstanceService.removeByIds(instanceSonList.stream().map(ObjInstance::getId).collect(Collectors.toList()));
+
+// List<String> queryParams = list.stream().map(CheckListVO::getNgOwner).distinct().collect(Collectors.toList()
+
+// List<ActivityTemplate>activityTemplateList=activityTemplateService.list(Wrappers.<ActivityTemplate>lambdaQuery()
+// .eq(ActivityTemplate::getPlanTemplateId,planTemplate.getId()));
+
 class Two {
 	static int l = 0;
 	One one_1 = new One("one-1");
