@@ -20,6 +20,27 @@ class One {
 //         Map<String, TyGroupVo> groupVoMap = new HashMap<>();
 }
 
+//git hub多个仓库
+// [core]
+// 	repositoryformatversion = 0
+// 	filemode = false
+// 	bare = false
+// 	logallrefupdates = true
+// 	symlinks = false
+// 	ignorecase = true
+// [remote "origin"]
+// 	url = https://***/hWX947526/CadWorkFlowService.git
+// 	fetch = +refs/heads/*:refs/remotes/origin/*
+// [remote "retmote_br"]
+// 	url = https://**/CBGIT-IPD/CMDA/CadWorkFlowService.git
+// 	fetch = +refs/heads/*:refs/remotes/retmote_br/*
+// [branch "master"]
+// 	remote = origin
+// 	merge = refs/heads/master
+// [branch "dev"]
+// 	remote = origin
+// 	merge = refs/heads/Br_develop
+
 
 
 
