@@ -98,6 +98,15 @@ List<CompletableFuture<DocumentVO>>futureList=docList.stream()
 //分组后的list
 List<List<String>>groupedIdList=Lists.partition(uniqueList,10);
 
+Map<String, String> instanceMap = baseInfo.stream().collect(Collectors.toMap(ComponentVo::getCode, ComponentVo::getValue));
+ 
+objInstanceService.removeByIds(instanceSonList.stream().map(ObjInstance::getId).collect(Collectors.toList()));
+
+List<String> queryParams = list.stream().map(CheckListVO::getNgOwner).distinct().collect(Collectors.toList()
+
+List<ActivityTemplate>activityTemplateList=activityTemplateService.list(Wrappers.<ActivityTemplate>lambdaQuery()
+.eq(ActivityTemplate::getPlanTemplateId,planTemplate.getId()));
+
 
 // // 1.排序，带参数类型
 // list.sort((String s1, String s2) -> s1.compareTo(s2));
