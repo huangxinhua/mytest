@@ -20,3 +20,5 @@
         Map<String, TyGroupVo> groupVoMap = new HashMap<>();
 
   =VLOOKUP(I2,'D:\CITC\40_版本开发\202404版\[维成员映射-生产-ALL.xlsx]维成员映射行信息'!$I:$I,1,0)
+
+  purge recyclebin 清空回收站对象
