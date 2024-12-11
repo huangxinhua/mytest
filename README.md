@@ -22,3 +22,6 @@
   =VLOOKUP(I2,'D:\CITC\40_版本开发\202404版\[维成员映射-生产-ALL.xlsx]维成员映射行信息'!$I:$I,1,0)
 
   purge recyclebin 清空回收站对象
+jps  查询java进程号
+jinfo -flags  XX（进程号） 查看启动的参数
+jstat -gc XX(进程号) 1000 10 每1000毫秒查询gc情况，10次
