@@ -25,3 +25,6 @@
 jps  查询java进程号
 jinfo -flags  XX（进程号） 查看启动的参数
 jstat -gc XX(进程号) 1000 10 每1000毫秒查询gc情况，10次
+JVM NewRatio与SurvivorRatio: https://sulangsss.github.io/2019/04/08/Java/JVM/Optimize/NewRatio%E4%B8%8ESurvivorRatio/
+
+https://pdai.tech/md/java/jvm/java-jvm-gc.html
